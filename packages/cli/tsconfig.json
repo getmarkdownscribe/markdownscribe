@@ -3,9 +3,17 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "tsBuildInfoFile": "./.cli.tsbuildinfo",
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests", "coverage"]
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "coverage"
+  ]
 }

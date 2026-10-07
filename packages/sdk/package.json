@@ -1,7 +1,7 @@
 {
   "name": "@markdownscribe/sdk",
-  "version": "0.1.0",
-  "description": "MarkdownScribe SDK — typed HTTP client for frontmatter, TOC, lint, format, mermaid and url-to-markdown.",
+  "version": "0.2.0",
+  "description": "MarkdownScribe does the Markdown work in one API call: parse frontmatter, build a TOC, lint, format, render Mermaid to SVG, convert any URL to Markdown. Pay per credit.",
   "keywords": [
     "markdown",
     "frontmatter",
@@ -18,6 +18,19 @@
     "llm-tools",
     "agent-tools"
   ],
+  "homepage": "https://github.com/markdownscribe/markdownscribe/tree/main/packages/sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markdownscribe/markdownscribe.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/markdownscribe/markdownscribe/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +42,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
@@ -40,12 +54,13 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "echo 'lint TBD (eslint em fase futura)'",
-    "clean": "rimraf dist coverage .turbo *.tsbuildinfo"
+    "clean": "rimraf dist coverage .turbo *.tsbuildinfo",
+    "openapi:sync": "node scripts/openapi.mjs sync",
+    "openapi:check": "node scripts/openapi.mjs check"
   },
   "devDependencies": {
-    "@markdownscribe/core": "workspace:*",
     "@types/node": "^22.0.0",
-    "postgres": "^3.4.5",
+    "openapi-typescript": "^7.13.0",
     "rimraf": "^6.0.0",
     "typescript": "^5.6.0",
     "vitest": "^4.1.0"

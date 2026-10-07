@@ -1,7 +1,7 @@
 {
   "name": "markdownscribe",
-  "version": "0.1.0",
-  "description": "MarkdownScribe CLI — frontmatter, TOC, lint, format, mermaid and url-to-markdown from the terminal, built for humans and LLM/agent tooling.",
+  "version": "0.2.0",
+  "description": "MarkdownScribe does the Markdown work in one API call: parse frontmatter, build a TOC, lint, format, render Mermaid to SVG, convert any URL to Markdown. Pay per credit.",
   "keywords": [
     "markdown",
     "cli",
@@ -18,6 +18,19 @@
     "agent-tools",
     "mdscribe"
   ],
+  "homepage": "https://github.com/markdownscribe/markdownscribe/tree/main/packages/cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markdownscribe/markdownscribe.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/markdownscribe/markdownscribe/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
   "type": "module",
   "bin": {
     "markdownscribe": "./dist/bin.js",
@@ -25,7 +38,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "publishConfig": {
     "access": "public"
@@ -39,13 +53,12 @@
     "clean": "rimraf dist coverage .turbo *.tsbuildinfo"
   },
   "dependencies": {
-    "@markdownscribe/sdk": "workspace:*",
+    "@markdownscribe/sdk": "workspace:^",
     "commander": "^13.0.0",
     "dotenv": "^16.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "postgres": "^3.4.5",
     "rimraf": "^6.0.0",
     "typescript": "^5.6.0",
     "vitest": "^4.1.0"

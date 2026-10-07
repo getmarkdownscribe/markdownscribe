@@ -1,0 +1,1309 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MarkdownScribe",
+    "description": "MarkdownScribe does the Markdown work in one API call: parse frontmatter, build a TOC, lint, format, render Mermaid to SVG, convert any URL to Markdown. Pay per credit.",
+    "version": "1.0.0",
+    "license": {
+      "name": "Proprietary",
+      "url": "https://markdownscribe.com/terms"
+    },
+    "contact": {
+      "name": "MarkdownScribe support",
+      "url": "https://markdownscribe.com/contact"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.markdownscribe.com",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "getServiceInfo",
+        "summary": "Discover what this service does and where its documentation lives",
+        "description": "MarkdownScribe: MarkdownScribe does the Markdown work in one API call: parse frontmatter, build a TOC, lint, format, render Mermaid to SVG, convert any URL to Markdown. Pay per credit. This endpoint needs no API key — it is the entry point when all you have is the host.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "type": "string"
+                    },
+                    "docs": {
+                      "type": "string"
+                    },
+                    "openapi": {
+                      "type": "string"
+                    },
+                    "llms_txt": {
+                      "type": "string"
+                    },
+                    "pricing": {
+                      "type": "string"
+                    },
+                    "mcp": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "status": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "version",
+                    "docs",
+                    "openapi",
+                    "llms_txt",
+                    "pricing",
+                    "mcp",
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Check that the service is up",
+        "description": "Liveness probe. No API key required, not charged.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "const": "ok"
+                    },
+                    "uptime_ms": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    "core_version": {
+                      "type": "string"
+                    },
+                    "node_version": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "uptime_ms",
+                    "core_version",
+                    "node_version"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/md/frontmatter": {
+      "post": {
+        "operationId": "parseFrontmatter",
+        "summary": "Parse YAML frontmatter and split it from the document body",
+        "description": "Returns the frontmatter as a JSON object (null when the document has none) and the remaining Markdown body. Invalid YAML returns 422 with the line and column of the first parser failure.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "frontmatter": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "frontmatter",
+                    "body",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 1,
+          "max": 1
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "markdown": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  }
+                },
+                "required": [
+                  "markdown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/md/toc": {
+      "post": {
+        "operationId": "buildToc",
+        "summary": "Build a table of contents from the document headings",
+        "description": "Returns the rendered Markdown list plus the structured headings with GitHub-compatible slugs. Use `options.min_depth` and `options.max_depth` to limit heading levels.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "toc": {
+                      "type": "string"
+                    },
+                    "headings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "depth": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 6
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "depth",
+                          "text",
+                          "slug",
+                          "line"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "toc",
+                    "headings",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 1,
+          "max": 1
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "markdown": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  },
+                  "options": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "min_depth": {
+                        "default": 1,
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 6
+                      },
+                      "max_depth": {
+                        "default": 6,
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 6
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "markdown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/md/lint": {
+      "post": {
+        "operationId": "lintMarkdown",
+        "summary": "Lint Markdown against structural rules",
+        "description": "Returns every finding with rule, line and description, plus a summary. `valid` is true when nothing was found.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "valid": {
+                      "type": "boolean"
+                    },
+                    "findings": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rule": {
+                            "type": "string",
+                            "pattern": "^MD\\d{3}$"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9007199254740991
+                          },
+                          "column": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9007199254740991
+                          },
+                          "message": {
+                            "type": "string"
+                          },
+                          "detail": {
+                            "type": "string"
+                          },
+                          "hint": {
+                            "type": "string"
+                          },
+                          "doc_url": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "rule",
+                          "name",
+                          "line",
+                          "message",
+                          "doc_url"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "summary": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "valid",
+                    "findings",
+                    "summary",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 2,
+          "max": 2
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "markdown": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  }
+                },
+                "required": [
+                  "markdown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/md/format": {
+      "post": {
+        "operationId": "formatMarkdown",
+        "summary": "Normalize Markdown formatting",
+        "description": "Returns the formatted document and whether anything changed, so you can use it as a check in CI. `options.prose_wrap` controls paragraph wrapping.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "formatted": {
+                      "type": "string"
+                    },
+                    "changed": {
+                      "type": "boolean"
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "formatted",
+                    "changed",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 2,
+          "max": 2
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "markdown": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  },
+                  "options": {
+                    "default": {},
+                    "type": "object",
+                    "properties": {
+                      "prose_wrap": {
+                        "default": "preserve",
+                        "type": "string",
+                        "enum": [
+                          "preserve",
+                          "always",
+                          "never"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "markdown"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/md/mermaid": {
+      "post": {
+        "operationId": "renderMermaid",
+        "summary": "Render Mermaid diagrams to SVG",
+        "description": "Accepts either a bare diagram (`diagram`) or a Markdown document with fenced ```mermaid blocks (`markdown`) — exactly one of the two. Diagrams that fail to render come back in `errors` while the rest still render.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "diagrams": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9007199254740991
+                          },
+                          "svg": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "index",
+                          "svg"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "index": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "line": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9007199254740991
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "index",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "summary": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "rendered": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        },
+                        "failed": {
+                          "type": "integer",
+                          "minimum": 0,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "rendered",
+                        "failed"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "diagrams",
+                    "errors",
+                    "summary",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 1,
+          "max": null,
+          "note": "1 when the document contains no diagram. Otherwise 5 for the first diagram plus 2 for each additional one, so the cost grows with the document."
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "diagram": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  },
+                  "markdown": {
+                    "type": "string",
+                    "maxLength": 1048576
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/url-to-md": {
+      "post": {
+        "operationId": "convertUrlToMarkdown",
+        "summary": "Convert a web page into Markdown",
+        "description": "`clean` mode tries the cheapest route first (an official .md file, then a static fetch, then a headless browser); `raw` always renders. `metadata.used_playwright` tells you which path was taken, and the cost follows it.",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "X-Request-Id": {
+                "$ref": "#/components/headers/X-Request-Id"
+              },
+              "X-Credits-Charged": {
+                "$ref": "#/components/headers/X-Credits-Charged"
+              },
+              "X-Credits-Remaining": {
+                "$ref": "#/components/headers/X-Credits-Remaining"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "type": "object",
+                  "properties": {
+                    "markdown": {
+                      "type": "string"
+                    },
+                    "mode": {
+                      "type": "string",
+                      "enum": [
+                        "clean",
+                        "raw"
+                      ]
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "author": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "published_date": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        },
+                        "used_playwright": {
+                          "type": "boolean"
+                        },
+                        "extraction_quality": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "author",
+                        "published_date",
+                        "used_playwright",
+                        "extraction_quality"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "request_id": {
+                          "type": "string",
+                          "description": "Same value as the X-Request-Id response header. Quote it in any bug report."
+                        },
+                        "duration_ms": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Server-side processing time for this operation."
+                        },
+                        "credits": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991,
+                          "description": "Credits charged for this call. Also in the X-Credits-Charged header."
+                        }
+                      },
+                      "required": [
+                        "request_id",
+                        "duration_ms",
+                        "credits"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "markdown",
+                    "mode",
+                    "metadata",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error",
+            "description": "Invalid request body."
+          },
+          "401": {
+            "$ref": "#/components/responses/Error",
+            "description": "Missing or invalid API key."
+          },
+          "402": {
+            "$ref": "#/components/responses/Error",
+            "description": "Not enough credits."
+          },
+          "413": {
+            "$ref": "#/components/responses/Error",
+            "description": "Request body above the size limit."
+          },
+          "429": {
+            "$ref": "#/components/responses/RateLimited"
+          },
+          "500": {
+            "$ref": "#/components/responses/Error",
+            "description": "Unexpected server error."
+          }
+        },
+        "x-credits": {
+          "min": 2,
+          "max": 8,
+          "note": "2 for `raw` and 3 for `clean` when a static fetch is enough; 8 when the page needed the headless browser. Check `metadata.used_playwright` and the X-Credits-Charged header."
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "mode": {
+                    "default": "clean",
+                    "type": "string",
+                    "enum": [
+                      "clean",
+                      "raw"
+                    ]
+                  }
+                },
+                "required": [
+                  "url"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "headers": {
+      "X-Request-Id": {
+        "description": "Identifier for this request, on every response. Quote it in any bug report.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "X-Credits-Charged": {
+        "description": "Credits charged for this call. Absent when nothing was charged.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "X-Credits-Remaining": {
+        "description": "Account balance after this call, read inside the same transaction as the debit. Absent when nothing was charged.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "Retry-After": {
+        "description": "Seconds to wait before retrying. Sent with 429.",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Error response. Every failure uses this shape: `error` is the stable code, `hint` says what to do next.",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "Stable snake_case code. Compare against this, never against `hint`."
+                },
+                "hint": {
+                  "type": "string",
+                  "description": "One sentence saying what to do next — not what went wrong."
+                },
+                "docs_url": {
+                  "type": "string",
+                  "description": "Documentation page for this specific code."
+                },
+                "request_id": {
+                  "type": "string"
+                },
+                "next_step": {
+                  "description": "A runnable command that resolves the error, when one exists.",
+                  "type": "string"
+                },
+                "report_url": {
+                  "description": "Pre-filled issue, carrying only the request_id. 5xx only.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "error",
+                "hint",
+                "docs_url",
+                "request_id"
+              ],
+              "additionalProperties": {}
+            }
+          }
+        }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded. Wait Retry-After seconds before retrying; retrying immediately makes the queue worse.",
+        "headers": {
+          "X-Request-Id": {
+            "$ref": "#/components/headers/X-Request-Id"
+          },
+          "Retry-After": {
+            "$ref": "#/components/headers/Retry-After"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "Stable snake_case code. Compare against this, never against `hint`."
+                },
+                "hint": {
+                  "type": "string",
+                  "description": "One sentence saying what to do next — not what went wrong."
+                },
+                "docs_url": {
+                  "type": "string",
+                  "description": "Documentation page for this specific code."
+                },
+                "request_id": {
+                  "type": "string"
+                },
+                "next_step": {
+                  "description": "A runnable command that resolves the error, when one exists.",
+                  "type": "string"
+                },
+                "report_url": {
+                  "description": "Pre-filled issue, carrying only the request_id. 5xx only.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "error",
+                "hint",
+                "docs_url",
+                "request_id"
+              ],
+              "additionalProperties": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

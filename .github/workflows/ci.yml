@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # Live tests call api.markdownscribe.com with the CI key (a few credits
+      # per run). On pushes and on PRs from this repository the key must be
+      # there: a live suite that silently skips protects nothing. PRs from
+      # forks have no access to secrets, so there the suite skips with a warning.
+      MDSCRIBE_API_KEY: ${{ secrets.MDSCRIBE_API_KEY }}
+      MDSCRIBE_REQUIRE_LIVE: ${{ (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Canonical description matches the API
+        run: node scripts/check-canonical.mjs
+      - name: SDK types match the published OpenAPI document
+        run: pnpm openapi:check

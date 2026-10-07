@@ -6,4 +6,4 @@
 // perderíamos a separação entre "alguém chamou do terminal" e "alguém chamou
 // de dentro de um programa" — que é justamente a distinção que a taxa de
 // adoção por agente precisa enxergar.
-export const CLI_VERSION = "0.1.0";
+export const CLI_VERSION = "0.2.0";

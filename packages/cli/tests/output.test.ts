@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isTty, formatError } from "../src/output.js";
+import { isTty, formatError, lowBalanceWarning } from "../src/output.js";
 import { MarkdownScribeApiError } from "@markdownscribe/sdk";
 
 // SPEC-010 §CLI: detecção TTY decide humano vs JSON (--json força JSON mesmo
@@ -135,5 +135,36 @@ describe("formatError — hint e next_step na saída (MKD-131)", () => {
     expect(result.exitCode).toBe(3);
     expect(result.message).toMatch(/balance: 0/);
     expect(result.message).toContain("exhausted");
+  });
+});
+
+// 0.2.0: o template de issue do repositório público exige `request_id`, e
+// quem usa o CLI só tem o stderr para copiar. Sem o id ali, o campo
+// obrigatório vira obstáculo em vez de ajuda.
+describe("request_id no erro", () => {
+  it("a mensagem termina com o request_id quando a API o mandou", () => {
+    const result = formatError(
+      new MarkdownScribeApiError(500, { error: "internal", request_id: "01JREQUESTIDLIVE" })
+    );
+
+    expect(result.message).toContain("request_id: 01JREQUESTIDLIVE");
+  });
+
+  it("sem request_id no corpo, nada de 'undefined' na mensagem", () => {
+    const result = formatError(new MarkdownScribeApiError(500, { error: "internal" }));
+
+    expect(result.message).not.toContain("request_id");
+    expect(result.message).not.toContain("undefined");
+  });
+});
+
+describe("lowBalanceWarning", () => {
+  it("abaixo do limiar, aponta para onde se compra crédito (o painel)", () => {
+    expect(lowBalanceWarning(120)).toContain("https://dashboard.markdownscribe.com");
+  });
+
+  it("no limiar ou acima, e sem saldo conhecido, não avisa", () => {
+    expect(lowBalanceWarning(500)).toBeNull();
+    expect(lowBalanceWarning(undefined)).toBeNull();
   });
 });

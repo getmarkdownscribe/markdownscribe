@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import { resolveConfig, ConfigError } from "../src/config.js";
 
-// SPEC-010 §CLI: resolução de chave (MDSCRIBE_API_KEY -> API_KEY_MAT ->
-// .env no cwd, nessa ordem) e de URL (MDSCRIBE_URL -> --base-url -> default
+// SPEC-010 §CLI: resolução de chave (MDSCRIBE_API_KEY -> .env no cwd,
+// nessa ordem) e de URL (MDSCRIBE_URL -> --base-url -> default
 // de produção). Sem chave resolvida, erro claro ANTES de qualquer chamada
 // de rede (exit code 1 tratado em output.ts).
 describe("resolveConfig", () => {
@@ -27,19 +27,18 @@ describe("resolveConfig", () => {
 
   it("resolves apiKey from MDSCRIBE_API_KEY when set", () => {
     process.env["MDSCRIBE_API_KEY"] = "from-mdscribe-env";
-    process.env["API_KEY_MAT"] = "from-api-key-mat";
 
     const config = resolveConfig({ cwd });
 
     expect(config.apiKey).toBe("from-mdscribe-env");
   });
 
-  it("falls back to API_KEY_MAT when MDSCRIBE_API_KEY is absent", () => {
+  // 0.2.0: o fallback API_KEY_MAT era nome interno da época de usuário
+  // único. Não pode virar contrato público de um pacote MIT.
+  it("ignores the legacy API_KEY_MAT variable", () => {
     process.env["API_KEY_MAT"] = "from-api-key-mat";
 
-    const config = resolveConfig({ cwd });
-
-    expect(config.apiKey).toBe("from-api-key-mat");
+    expect(() => resolveConfig({ cwd })).toThrow(ConfigError);
   });
 
   it("falls back to .env in cwd when no env var is set", () => {
@@ -52,7 +51,7 @@ describe("resolveConfig", () => {
 
   it("throws ConfigError with a clear message when no key can be resolved anywhere", () => {
     expect(() => resolveConfig({ cwd })).toThrow(ConfigError);
-    expect(() => resolveConfig({ cwd })).toThrow(/MDSCRIBE_API_KEY|API_KEY_MAT|\.env/);
+    expect(() => resolveConfig({ cwd })).toThrow(/MDSCRIBE_API_KEY/);
   });
 
   it("resolves baseUrl from MDSCRIBE_URL when set", () => {
@@ -74,9 +73,8 @@ describe("resolveConfig", () => {
   });
 
   // Sprint 11 / MKD-130 (SPEC-013 §10): o host padrão passa a ser o domínio
-  // próprio. O host do Railway continua respondendo, mas não aparece mais em
-  // nenhum texto público (README, npm) — um agente que lê o pacote precisa
-  // conseguir associar a URL ao produto.
+  // próprio: um agente que lê o pacote precisa conseguir associar a URL ao
+  // produto.
   it("defaults baseUrl to api.markdownscribe.com when nothing is set", () => {
     process.env["MDSCRIBE_API_KEY"] = "key";
 

@@ -2,6 +2,8 @@
 
 Typed HTTP client for the [MarkdownScribe](https://api.markdownscribe.com) API — frontmatter, table of contents, lint, format, Mermaid-to-SVG, and URL-to-Markdown, all in one small dependency. Designed to be easy for both humans and LLM/agent tooling to discover and call correctly on the first try.
 
+Get an API key at [dashboard.markdownscribe.com](https://dashboard.markdownscribe.com/).
+
 ## Install
 
 ```bash
@@ -29,16 +31,18 @@ try {
 
 ## Methods
 
-| Method | Endpoint | What it does |
-|---|---|---|
-| `frontmatter(input)` | `POST /v1/md/frontmatter` | Extract YAML frontmatter + body from Markdown |
-| `toc(input)` | `POST /v1/md/toc` | Generate a table of contents from headings |
-| `format(input)` | `POST /v1/md/format` | Normalize Markdown formatting |
-| `lint(input)` | `POST /v1/md/lint` | Lint Markdown against structural rules |
-| `mermaid(input)` | `POST /v1/md/mermaid` | Render Mermaid diagrams (in a `.mmd` string or embedded in Markdown) to SVG |
-| `urlToMd(input)` | `POST /v1/url-to-md` | Convert a web page into Markdown (`clean` or `raw` mode) |
+| Method               | Endpoint                  | What it does                                                                |
+| -------------------- | ------------------------- | --------------------------------------------------------------------------- |
+| `frontmatter(input)` | `POST /v1/md/frontmatter` | Extract YAML frontmatter + body from Markdown                               |
+| `toc(input)`         | `POST /v1/md/toc`         | Generate a table of contents from headings                                  |
+| `format(input)`      | `POST /v1/md/format`      | Normalize Markdown formatting                                               |
+| `lint(input)`        | `POST /v1/md/lint`        | Lint Markdown against structural rules                                      |
+| `mermaid(input)`     | `POST /v1/md/mermaid`     | Render Mermaid diagrams (in a `.mmd` string or embedded in Markdown) to SVG |
+| `urlToMd(input)`     | `POST /v1/url-to-md`      | Convert a web page into Markdown (`clean` or `raw` mode)                    |
 
-Every method returns the operation's result plus a `meta` object (`request_id`, `credits`, and `duration_ms` where applicable) — the same data used to reconcile what was charged.
+Every method returns the operation's result plus a `meta` object (`request_id`, `credits`, `duration_ms`) — the same data used to reconcile what was charged.
+
+Input and output types are exported (`FrontmatterInput`, `FrontmatterOutput`, … `UrlToMdOutput`). They are generated from the API's [OpenAPI document](https://api.markdownscribe.com/openapi.json), so they match what the API actually accepts and returns.
 
 ### Watching the balance
 
@@ -66,13 +70,13 @@ Two headers go out with every request. Both describe **software**, never a perso
 **`User-Agent`** — the library and runtime:
 
 ```text
-markdownscribe-sdk/0.1.0 node/v22.14.0
+markdownscribe-sdk/0.2.0 node/v22.14.0
 ```
 
 The CLI prefixes its own name, so the two can be told apart:
 
 ```text
-markdownscribe-cli/0.1.0 markdownscribe-sdk/0.1.0 node/v22.14.0
+markdownscribe-cli/0.2.0 markdownscribe-sdk/0.2.0 node/v22.14.0
 ```
 
 If you build a tool on top of this SDK, identify it the same way:
@@ -88,12 +92,12 @@ const client = new MarkdownScribeClient({
 
 Detection reads these environment variables and nothing else:
 
-| Variable | Result |
-|---|---|
-| `AGENT` | its value, lowercased and slugified |
-| `CLAUDECODE` | `claude-code` |
-| `CURSOR_AGENT` | `cursor` |
-| `CI` | `ci` |
+| Variable       | Result                              |
+| -------------- | ----------------------------------- |
+| `AGENT`        | its value, lowercased and slugified |
+| `CLAUDECODE`   | `claude-code`                       |
+| `CURSOR_AGENT` | `cursor`                            |
+| `CI`           | `ci`                                |
 
 ### Turning it off
 
@@ -111,8 +115,8 @@ Why we collect it at all, stated plainly: we want to know what share of calls co
 
 ## Errors
 
-All failures throw `MarkdownScribeApiError` (`status`, `body`, `requestId`), normalizing every error family the API returns (validation/auth/billing, internal errors, and upstream-extraction-service failures) into one consistent shape.
+All failures throw `MarkdownScribeApiError`: `status`, `body`, and the fields of the API's error contract — `hint` (what went wrong, in a sentence), `nextStep` (what to do about it), `docsUrl`, `reportUrl` (on server errors) and `requestId` (quote it in a [bug report](https://github.com/markdownscribe/markdownscribe/issues/new?template=bug.yml)).
 
 ## Scope
 
-This SDK covers the 6 REST markdown operations authenticated via `X-API-Key`. Account/session endpoints (Clerk-authenticated dashboard) are out of scope. A first-class MCP server (for direct use from Claude and other agent runtimes) is planned for a follow-up sprint — see the [markdownscribe CLI](../cli/README.md) for terminal usage today.
+This SDK covers the 6 REST markdown operations authenticated via `X-API-Key`. For the terminal, see the [`markdownscribe` CLI](https://github.com/markdownscribe/markdownscribe/tree/main/packages/cli#readme). Source, issues and changelog: [github.com/markdownscribe/markdownscribe](https://github.com/markdownscribe/markdownscribe).

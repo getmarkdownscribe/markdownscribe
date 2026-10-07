@@ -11,7 +11,7 @@ import type {
   TocOutput,
   UrlToMdInput,
   UrlToMdOutput,
-} from "@markdownscribe/core";
+} from "./types.js";
 import { detectClientEnv } from "./detect-client-env.js";
 import { MarkdownScribeApiError, type MarkdownScribeErrorBody } from "./errors.js";
 import { SDK_VERSION } from "./version.js";
@@ -67,9 +67,7 @@ export type WithMeta<T> = T & { meta: ResponseMeta };
 
 // Sprint 11 / MKD-130 (SPEC-013 §10, D-043 §4): domínio próprio como padrão.
 // Exportada porque o CLI reusa esta constante (fonte única; a Sprint 10
-// tinha uma cópia em cada pacote). O host do Railway
-// (api-production-d0eb.up.railway.app) continua atendendo, mas não é mais
-// citado em texto público.
+// tinha uma cópia em cada pacote).
 export const DEFAULT_BASE_URL = "https://api.markdownscribe.com";
 
 // Cliente HTTP tipado pras 6 operações REST — mesma auth X-API-Key que a

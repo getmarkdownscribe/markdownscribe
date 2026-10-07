@@ -15,8 +15,7 @@ export interface CliConfig {
   baseUrl: string;
 }
 
-// Resolução de chave: MDSCRIBE_API_KEY -> API_KEY_MAT (compat `railway run`)
-// -> .env no cwd, nessa ordem (SPEC-010 §CLI). Resolução de URL: --base-url
+// Resolução de chave: MDSCRIBE_API_KEY -> .env no cwd, nessa ordem. Resolução de URL: --base-url
 // -> MDSCRIBE_URL -> DEFAULT_BASE_URL do SDK (api.markdownscribe.com desde a
 // Sprint 11 / MKD-130; fonte única, não duplicar aqui).
 export function resolveConfig(options: ResolveConfigOptions): CliConfig {
@@ -24,11 +23,11 @@ export function resolveConfig(options: ResolveConfigOptions): CliConfig {
   const dotenvResult = existsSync(dotenvPath) ? loadDotenv({ path: dotenvPath }).parsed : undefined;
 
   const apiKey =
-    process.env["MDSCRIBE_API_KEY"] ?? process.env["API_KEY_MAT"] ?? dotenvResult?.["MDSCRIBE_API_KEY"];
+    process.env["MDSCRIBE_API_KEY"] ?? dotenvResult?.["MDSCRIBE_API_KEY"];
 
   if (!apiKey) {
     throw new ConfigError(
-      "No API key found. Set MDSCRIBE_API_KEY (or API_KEY_MAT), or add MDSCRIBE_API_KEY to a .env file in the current directory."
+      "No API key found. Set MDSCRIBE_API_KEY, or add MDSCRIBE_API_KEY to a .env file in the current directory."
     );
   }
 

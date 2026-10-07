@@ -1,0 +1,26 @@
+{
+  "name": "markdownscribe-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MarkdownScribe public clients: TypeScript SDK and CLI.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markdownscribe/markdownscribe.git"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.29.3",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "openapi:sync": "pnpm --filter @markdownscribe/sdk openapi:sync",
+    "openapi:check": "pnpm --filter @markdownscribe/sdk openapi:check"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

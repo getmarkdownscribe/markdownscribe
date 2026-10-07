@@ -14,7 +14,7 @@ export const LOW_BALANCE_THRESHOLD = 500;
 export function lowBalanceWarning(remaining: number | undefined): string | null {
   if (remaining === undefined || remaining >= LOW_BALANCE_THRESHOLD) return null;
   return (
-    `warning: ${remaining} credits left — see https://markdownscribe.com/pricing
+    `warning: ${remaining} credits left — buy more at https://dashboard.markdownscribe.com
 `
   );
 }
@@ -74,6 +74,8 @@ function errorDetail(err: MarkdownScribeApiError): string {
   if (err.nextStep) tail.push(`Try: ${err.nextStep}`);
   if (err.reportUrl) tail.push(`Report it: ${err.reportUrl}`);
   if (err.docsUrl) tail.push(`Docs: ${err.docsUrl}`);
+  // O que se cola num relato de bug: o id que acha esta chamada nos logs.
+  if (err.requestId) tail.push(`request_id: ${err.requestId}`);
 
   return tail.length > 0 ? `${head}\n  ${tail.join("\n  ")}` : head;
 }

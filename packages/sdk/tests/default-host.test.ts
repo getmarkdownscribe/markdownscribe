@@ -12,12 +12,10 @@ import {
 //
 // O segundo teste é uma chamada REAL ao host padrão (Article II): prova que
 // o domínio existe, tem TLS válido e chega na API (GET /health é público).
-// Nasceu RED em 2026-09-19: o custom domain ainda estava em
-// CERTIFICATE_STATUS_TYPE_VALIDATING_OWNERSHIP no Railway.
+// Nasceu RED em 2026-09-19: o certificado do domínio ainda estava em emissão.
 describe("DEFAULT_BASE_URL", () => {
-  it("é o domínio próprio, não o host do Railway", () => {
+  it("é o domínio próprio do produto", () => {
     expect(DEFAULT_BASE_URL).toBe("https://api.markdownscribe.com");
-    expect(DEFAULT_BASE_URL).not.toContain("railway.app");
   });
 
   it("GET /health no host padrão responde 200 com status ok (chamada real)", async () => {

@@ -11,4 +11,4 @@
 // a mentir sem nunca falhar. Por isso existe `version.test.ts`, que compara
 // esta constante com o `package.json` e QUEBRA o build quando divergirem.
 // A constante é manual; a sincronia não é.
-export const SDK_VERSION = "0.1.0";
+export const SDK_VERSION = "0.2.0";
