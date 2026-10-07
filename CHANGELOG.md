@@ -2,7 +2,7 @@
 
 Both packages are versioned together while they move in lockstep. Dates are UTC.
 
-## 0.2.0 — unreleased
+## 0.2.0 — 2026-10-07
 
 First release from this public repository, under the MIT license.
 
