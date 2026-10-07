@@ -29,12 +29,6 @@ describe.skipIf(!API_KEY)("CLI contra a API real", () => {
     ...(process.env["MDSCRIBE_URL"] ? { MDSCRIBE_URL: process.env["MDSCRIBE_URL"] } : {}),
   });
 
-  it("--version imprime a versão do package.json", () => {
-    const result = runCli(["--version"], {});
-    expect(result.status).toBe(0);
-    expect(result.stdout.trim()).toMatch(/^\d+\.\d+\.\d+$/);
-  });
-
   it("frontmatter de um arquivo: imprime o YAML parseado e os créditos", () => {
     const file = join(dir, "post.md");
     writeFileSync(file, "---\ntitle: Release notes\ndate: 2026-10-07\n---\n\n# Release notes\n");

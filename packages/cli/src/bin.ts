@@ -71,7 +71,7 @@ program
   .description(
     "MarkdownScribe CLI — frontmatter, TOC, lint, format, mermaid and url-to-markdown from the terminal."
   )
-  .version("0.1.0")
+  .version(CLI_VERSION)
   .option("--base-url <url>", "override the MarkdownScribe API base URL");
 
 program
