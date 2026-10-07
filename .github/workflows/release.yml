@@ -1,9 +1,14 @@
 name: release
 
-# Tag sdk-vX.Y.Z publishes @markdownscribe/sdk; cli-vX.Y.Z publishes markdownscribe.
-# Publishing uses npm trusted publishing (OIDC): no npm token is stored here,
-# and npm attaches provenance automatically. Requires npm >= 11.5.1 and
-# Node >= 22.14 (https://docs.npmjs.com/trusted-publishers/).
+# Tag sdk-vX.Y.Z stages @markdownscribe/sdk; cli-vX.Y.Z stages markdownscribe.
+# Staged publishing: the workflow uploads the tarball through trusted publishing
+# (OIDC, no npm token stored here), and a maintainer approves it on npmjs.com
+# with 2FA before it becomes installable. The trusted publisher connections
+# allow staging only, on purpose. Requires npm >= 11.15.0
+# (https://docs.npmjs.com/trusted-publishers/,
+# https://github.blog/changelog/2026-05-22-staged-publishing-and-new-install-time-controls-for-npm/).
+# After approval, verify with:
+#   node scripts/check-npm-published.mjs <package> <version>
 
 on:
   push:
@@ -29,10 +34,10 @@ jobs:
           node-version: 24
           registry-url: https://registry.npmjs.org
           cache: pnpm
-      - name: npm supports trusted publishing
+      - name: npm with staged publishing (>= 11.15.0)
         run: |
+          npm install -g npm@^11.15.0
           npm --version
-          node -e "const [a,b,c]=process.argv[1].split('.').map(Number);if(a<11||(a===11&&(b<5||(b===5&&c<1)))){console.error('npm >= 11.5.1 required');process.exit(1)}" "$(npm --version)"
       - name: Resolve package from tag
         id: pkg
         run: |
@@ -52,8 +57,8 @@ jobs:
         working-directory: packages/cli
         # `workspace:^` only means something inside this repository; npm needs a real range.
         run: npm pkg set "dependencies.@markdownscribe/sdk=^$(node -p "require('../sdk/package.json').version")"
-      - name: Publish
+      - name: Stage for approval
         working-directory: ${{ steps.pkg.outputs.dir }}
-        run: npm publish --access public
-      - name: Verify the registry (metadata + provenance)
-        run: node scripts/check-npm-published.mjs "$(node -p "require('./${{ steps.pkg.outputs.dir }}/package.json').name")" "${{ steps.pkg.outputs.version }}"
+        run: npm stage publish --access public
+      - name: Next step
+        run: echo "Staged. Approve it at npmjs.com (Staged Packages, 2FA), then run scripts/check-npm-published.mjs."

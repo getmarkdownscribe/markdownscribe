@@ -26,4 +26,4 @@ pnpm test
 
 ## Releases
 
-Maintainers only. Bump the version in `package.json` and in `src/version.ts` (a test keeps the two in sync), update `CHANGELOG.md`, then push a tag `sdk-vX.Y.Z` or `cli-vX.Y.Z`. The release workflow publishes to npm with provenance through trusted publishing; no npm token is stored in this repository.
+Maintainers only. Bump the version in `package.json` and in `src/version.ts` (a test keeps the two in sync), update `CHANGELOG.md`, then push a tag `sdk-vX.Y.Z` or `cli-vX.Y.Z`. The release workflow stages the package on npm through trusted publishing (no npm token is stored in this repository); a maintainer approves it on npmjs.com with 2FA, and only then is it installable. Release the SDK before the CLI, which depends on it.
