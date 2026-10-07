@@ -1,0 +1,53 @@
+{
+  "name": "markdownscribe",
+  "version": "0.1.0",
+  "description": "MarkdownScribe CLI — frontmatter, TOC, lint, format, mermaid and url-to-markdown from the terminal, built for humans and LLM/agent tooling.",
+  "keywords": [
+    "markdown",
+    "cli",
+    "frontmatter",
+    "toc",
+    "table-of-contents",
+    "lint",
+    "markdown-lint",
+    "format",
+    "mermaid",
+    "url-to-markdown",
+    "command-line",
+    "llm-tools",
+    "agent-tools",
+    "mdscribe"
+  ],
+  "type": "module",
+  "bin": {
+    "markdownscribe": "./dist/bin.js",
+    "mdscribe": "./dist/bin.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "echo 'lint TBD (eslint em fase futura)'",
+    "clean": "rimraf dist coverage .turbo *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@markdownscribe/sdk": "workspace:*",
+    "commander": "^13.0.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "postgres": "^3.4.5",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0"
+  }
+}

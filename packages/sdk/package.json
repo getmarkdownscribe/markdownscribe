@@ -1,0 +1,53 @@
+{
+  "name": "@markdownscribe/sdk",
+  "version": "0.1.0",
+  "description": "MarkdownScribe SDK — typed HTTP client for frontmatter, TOC, lint, format, mermaid and url-to-markdown.",
+  "keywords": [
+    "markdown",
+    "frontmatter",
+    "toc",
+    "table-of-contents",
+    "lint",
+    "markdown-lint",
+    "format",
+    "mermaid",
+    "url-to-markdown",
+    "sdk",
+    "typescript",
+    "api-client",
+    "llm-tools",
+    "agent-tools"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "echo 'lint TBD (eslint em fase futura)'",
+    "clean": "rimraf dist coverage .turbo *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "@markdownscribe/core": "workspace:*",
+    "@types/node": "^22.0.0",
+    "postgres": "^3.4.5",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0"
+  }
+}
