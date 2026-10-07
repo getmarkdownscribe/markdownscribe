@@ -33,3 +33,5 @@ jobs:
         run: node scripts/check-canonical.mjs
       - name: SDK types match the published OpenAPI document
         run: pnpm openapi:check
+      - name: Context cost within budget
+        run: pnpm context:cost

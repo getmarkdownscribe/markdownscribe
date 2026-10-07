@@ -18,9 +18,11 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "openapi:sync": "pnpm --filter @markdownscribe/sdk openapi:sync",
-    "openapi:check": "pnpm --filter @markdownscribe/sdk openapi:check"
+    "openapi:check": "pnpm --filter @markdownscribe/sdk openapi:check",
+    "context:cost": "node scripts/context-cost.mjs"
   },
   "devDependencies": {
+    "js-tiktoken": "^1.0.21",
     "typescript": "^5.6.0"
   }
 }
