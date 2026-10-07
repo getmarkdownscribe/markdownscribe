@@ -51,7 +51,7 @@ Every response reports what it charged (`X-Credits-Charged`) and the balance lef
 
 ## Errors
 
-Every error carries a `request_id`, a `hint` and, when there is one, a `next_step`. Quote the `request_id` when you [open an issue](https://github.com/markdownscribe/markdownscribe/issues/new/choose): it is how we find your call in our logs.
+Every error carries a `request_id`, a `hint` and, when there is one, a `next_step`. Quote the `request_id` when you [open an issue](https://github.com/getmarkdownscribe/markdownscribe/issues/new/choose): it is how we find your call in our logs.
 
 ## Development
 

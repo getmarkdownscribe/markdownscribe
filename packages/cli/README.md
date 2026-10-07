@@ -1,6 +1,6 @@
 # markdownscribe (CLI)
 
-Command-line interface for [MarkdownScribe](https://api.markdownscribe.com) — frontmatter, table of contents, lint, format, Mermaid-to-SVG, and URL-to-Markdown, from your terminal or from a shell script/agent runner. Built on top of [`@markdownscribe/sdk`](https://github.com/markdownscribe/markdownscribe/tree/main/packages/sdk#readme).
+Command-line interface for [MarkdownScribe](https://api.markdownscribe.com) — frontmatter, table of contents, lint, format, Mermaid-to-SVG, and URL-to-Markdown, from your terminal or from a shell script/agent runner. Built on top of [`@markdownscribe/sdk`](https://github.com/getmarkdownscribe/markdownscribe/tree/main/packages/sdk#readme).
 
 Get an API key at [dashboard.markdownscribe.com](https://dashboard.markdownscribe.com/).
 
@@ -44,8 +44,8 @@ mdscribe url <url> [--mode clean|raw] [--save <path>]
 | 6    | Upstream service unavailable (503/504/424) |
 | 7    | Not found (404)                            |
 
-Scriptable by design: every failure mode maps to a distinct, documented exit code. Error messages on stderr end with the call's `request_id` — quote it in a [bug report](https://github.com/markdownscribe/markdownscribe/issues/new?template=bug.yml).
+Scriptable by design: every failure mode maps to a distinct, documented exit code. Error messages on stderr end with the call's `request_id` — quote it in a [bug report](https://github.com/getmarkdownscribe/markdownscribe/issues/new?template=bug.yml).
 
 ## Scope
 
-Covers the 6 REST markdown operations. Source, issues and changelog: [github.com/markdownscribe/markdownscribe](https://github.com/markdownscribe/markdownscribe).
+Covers the 6 REST markdown operations. Source, issues and changelog: [github.com/getmarkdownscribe/markdownscribe](https://github.com/getmarkdownscribe/markdownscribe).

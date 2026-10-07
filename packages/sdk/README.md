@@ -115,8 +115,8 @@ Why we collect it at all, stated plainly: we want to know what share of calls co
 
 ## Errors
 
-All failures throw `MarkdownScribeApiError`: `status`, `body`, and the fields of the API's error contract — `hint` (what went wrong, in a sentence), `nextStep` (what to do about it), `docsUrl`, `reportUrl` (on server errors) and `requestId` (quote it in a [bug report](https://github.com/markdownscribe/markdownscribe/issues/new?template=bug.yml)).
+All failures throw `MarkdownScribeApiError`: `status`, `body`, and the fields of the API's error contract — `hint` (what went wrong, in a sentence), `nextStep` (what to do about it), `docsUrl`, `reportUrl` (on server errors) and `requestId` (quote it in a [bug report](https://github.com/getmarkdownscribe/markdownscribe/issues/new?template=bug.yml)).
 
 ## Scope
 
-This SDK covers the 6 REST markdown operations authenticated via `X-API-Key`. For the terminal, see the [`markdownscribe` CLI](https://github.com/markdownscribe/markdownscribe/tree/main/packages/cli#readme). Source, issues and changelog: [github.com/markdownscribe/markdownscribe](https://github.com/markdownscribe/markdownscribe).
+This SDK covers the 6 REST markdown operations authenticated via `X-API-Key`. For the terminal, see the [`markdownscribe` CLI](https://github.com/getmarkdownscribe/markdownscribe/tree/main/packages/cli#readme). Source, issues and changelog: [github.com/getmarkdownscribe/markdownscribe](https://github.com/getmarkdownscribe/markdownscribe).

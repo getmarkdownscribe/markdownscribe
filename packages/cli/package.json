@@ -18,14 +18,14 @@
     "agent-tools",
     "mdscribe"
   ],
-  "homepage": "https://github.com/markdownscribe/markdownscribe/tree/main/packages/cli#readme",
+  "homepage": "https://github.com/getmarkdownscribe/markdownscribe/tree/main/packages/cli#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markdownscribe/markdownscribe.git",
+    "url": "git+https://github.com/getmarkdownscribe/markdownscribe.git",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/markdownscribe/markdownscribe/issues"
+    "url": "https://github.com/getmarkdownscribe/markdownscribe/issues"
   },
   "license": "MIT",
   "engines": {

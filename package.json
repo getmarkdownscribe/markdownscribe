@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markdownscribe/markdownscribe.git"
+    "url": "git+https://github.com/getmarkdownscribe/markdownscribe.git"
   },
   "engines": {
     "node": ">=22.0.0",

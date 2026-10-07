@@ -4,7 +4,7 @@ Issues and pull requests are welcome.
 
 ## Reporting a bug
 
-Use the [bug report form](https://github.com/markdownscribe/markdownscribe/issues/new?template=bug.yml). The `request_id` field is required: every API response carries one (header `X-Request-Id`, `meta.request_id` in the SDK, and the CLI prints it on errors), and it is the only way to find your call on our side.
+Use the [bug report form](https://github.com/getmarkdownscribe/markdownscribe/issues/new?template=bug.yml). The `request_id` field is required: every API response carries one (header `X-Request-Id`, `meta.request_id` in the SDK, and the CLI prints it on errors), and it is the only way to find your call on our side.
 
 ## Working on the code
 

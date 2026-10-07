@@ -107,7 +107,7 @@ describe("formatError — hint e next_step na saída (MKD-131)", () => {
       apiErr(503, {
         error: "service_unavailable",
         hint: "Try again shortly.",
-        report_url: "https://github.com/markdownscribe/markdownscribe/issues/new?body=req",
+        report_url: "https://github.com/getmarkdownscribe/markdownscribe/issues/new?body=req",
       })
     );
 

@@ -52,7 +52,7 @@ describe("MarkdownScribeApiError — campos do contrato", () => {
       error: "service_unavailable",
       hint: "Try again shortly.",
       kind: "render_service_unavailable",
-      report_url: "https://github.com/markdownscribe/markdownscribe/issues/new?body=x",
+      report_url: "https://github.com/getmarkdownscribe/markdownscribe/issues/new?body=x",
       request_id: "01JBQ8Z5R7X9K2M4N6P8Q0S2T4",
     });
 

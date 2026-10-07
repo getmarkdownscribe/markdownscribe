@@ -18,14 +18,14 @@
     "llm-tools",
     "agent-tools"
   ],
-  "homepage": "https://github.com/markdownscribe/markdownscribe/tree/main/packages/sdk#readme",
+  "homepage": "https://github.com/getmarkdownscribe/markdownscribe/tree/main/packages/sdk#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/markdownscribe/markdownscribe.git",
+    "url": "git+https://github.com/getmarkdownscribe/markdownscribe.git",
     "directory": "packages/sdk"
   },
   "bugs": {
-    "url": "https://github.com/markdownscribe/markdownscribe/issues"
+    "url": "https://github.com/getmarkdownscribe/markdownscribe/issues"
   },
   "license": "MIT",
   "engines": {
