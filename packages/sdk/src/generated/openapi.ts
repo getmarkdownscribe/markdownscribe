@@ -165,7 +165,13 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        /**
+         * @description Stable snake_case error code. Each one has a page at https://docs.markdownscribe.com/errors/<code>.
+         * @enum {string}
+         */
+        ErrorCode: "validation" | "invalid_request" | "unauthorized" | "insufficient_credits" | "not_found" | "key_limit_reached" | "payload_too_large" | "invalid_frontmatter" | "extraction_empty" | "fetch_failed" | "rate_limited" | "internal" | "service_unavailable" | "clerk_not_configured" | "timeout";
+    };
     responses: {
         /** @description Error response. Every failure uses this shape: `error` is the stable code, `hint` says what to do next. */
         Error: {
@@ -175,8 +181,7 @@ export interface components {
             };
             content: {
                 "application/json": {
-                    /** @description Stable snake_case code. Compare against this, never against `hint`. */
-                    error: string;
+                    error: components["schemas"]["ErrorCode"];
                     /** @description One sentence saying what to do next — not what went wrong. */
                     hint: string;
                     /** @description Documentation page for this specific code. */
@@ -200,8 +205,7 @@ export interface components {
             };
             content: {
                 "application/json": {
-                    /** @description Stable snake_case code. Compare against this, never against `hint`. */
-                    error: string;
+                    error: components["schemas"]["ErrorCode"];
                     /** @description One sentence saying what to do next — not what went wrong. */
                     hint: string;
                     /** @description Documentation page for this specific code. */
