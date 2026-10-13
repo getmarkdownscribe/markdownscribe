@@ -1,0 +1,131 @@
+name: site
+
+# Site (markdownscribe.com) and docs (docs.markdownscribe.com): two Workers
+# with static assets (D-047). Build and checks on every PR; a Version URL per
+# PR as preview; deploy only from main, and only after the build passes.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "packages/sdk/openapi.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/site.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - "packages/sdk/openapi.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/site.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Shared data and brand tests
+        run: pnpm --filter @markdownscribe/site-shared test
+      - name: Type check
+        run: pnpm --filter "./site/**" typecheck
+      - name: Build site and docs
+        run: pnpm --filter "./site/**" build
+      - name: No brand colour typed outside site/shared/brand (SPEC-015)
+        run: node scripts/check-brand-hex.mjs
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site-dist
+          path: |
+            site/www/dist
+            site/docs/dist
+          retention-days: 7
+
+  preview:
+    # Forks have no access to secrets: they get the build and checks, not a preview.
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v8
+        with:
+          name: site-dist
+          path: site
+      - name: Upload preview versions
+        id: versions
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        # A Version URL exige que o Worker já exista. Antes do primeiro deploy
+        # (feito só a partir do main) não há prévia: o PR é avisado e o passo
+        # passa. Qualquer outro erro do wrangler falha o job, com a saída
+        # visível (`|| status=$?` evita que o `bash -e` engula a mensagem).
+        run: |
+          for app in www docs; do
+            status=0
+            out=$(pnpm --filter "@markdownscribe/site-$app" exec wrangler versions upload 2>&1) || status=$?
+            echo "$out"
+            if [ "$status" -ne 0 ]; then
+              if printf '%s' "$out" | grep -q "does not yet exist"; then
+                echo "$app=no preview yet: the first deploy happens when this PR merges" >> "$GITHUB_OUTPUT"
+                continue
+              fi
+              exit "$status"
+            fi
+            url=$(printf '%s\n' "$out" | grep -oE 'https://[a-z0-9.-]+\.workers\.dev' | tail -n 1)
+            if [ -z "$url" ]; then echo "no Version URL for $app"; exit 1; fi
+            echo "$app=$url" >> "$GITHUB_OUTPUT"
+          done
+      - name: Comment preview URLs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" --edit-last --create-if-none --body "Preview for ${{ github.event.pull_request.head.sha }}:
+          - site: ${{ steps.versions.outputs.www }}
+          - docs: ${{ steps.versions.outputs.docs }}"
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v8
+        with:
+          name: site-dist
+          path: site
+      - name: Deploy site and docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          pnpm --filter @markdownscribe/site-www exec wrangler deploy
+          pnpm --filter @markdownscribe/site-docs exec wrangler deploy

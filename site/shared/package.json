@@ -1,0 +1,26 @@
+{
+  "name": "@markdownscribe/site-shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Data and brand wiring shared by the MarkdownScribe site and docs, read from the published OpenAPI document and the synced brand assets.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    "./pricing": "./src/pricing.ts",
+    "./links": "./src/links.ts",
+    "./error-codes": "./src/error-codes.ts",
+    "./head-tags": "./src/head-tags.mjs",
+    "./base.css": "./src/base.css",
+    "./starlight.css": "./src/starlight.css",
+    "./brand/*": "./brand/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0"
+  }
+}

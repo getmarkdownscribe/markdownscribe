@@ -1,0 +1,19 @@
+---
+// Esqueleto da home (MKD-169). A página de verdade, na hierarquia da D-046,
+// nasce na história F (MKD-123). O H1 já é a frase canônica: o
+// verificar-dispersao da história I confere que ele é igual ao GET / da API.
+import Base from "../layouts/Base.astro";
+import { HOSTS } from "@markdownscribe/site-shared/links";
+
+const PRODUCT_DESCRIPTION =
+  "MarkdownScribe does the Markdown work in one API call: parse frontmatter, build a TOC, lint, format, render Mermaid to SVG, convert any URL to Markdown. Pay per credit.";
+---
+
+<Base title="MarkdownScribe" description={PRODUCT_DESCRIPTION}>
+  <h1>{PRODUCT_DESCRIPTION}</h1>
+  <p>
+    Read the <a href={HOSTS.docs}>documentation</a>, the{" "}
+    <a href={`${HOSTS.api}/openapi.json`}>OpenAPI document</a>, or get a key in the{" "}
+    <a href={HOSTS.dashboard}>dashboard</a>.
+  </p>
+</Base>
