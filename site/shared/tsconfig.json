@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "allowJs": true,
+    "checkJs": false,
+    "types": ["node"]
+  },
+  // tests/brand.test.ts é da história da marca (MKD-179) e não passa no
+  // `noUncheckedIndexedAccess` do tsconfig base; roda no vitest, que não
+  // checa tipo. Fica fora daqui até a marca ajustar o arquivo no privado.
+  "include": ["src", "scripts", "tests/shared.test.ts", "tests/head.test.ts"]
+}

@@ -1,0 +1,17 @@
+// docs.markdownscribe.com — Worker só com static assets (D-047 §1).
+// O domínio próprio entra na história C (MKD-170); até lá o Worker responde
+// só em *.workers.dev.
+// [fonte: developers.cloudflare.com/workers/framework-guides/web-apps/astro]
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "markdownscribe-docs",
+  "compatibility_date": "2026-10-13",
+  // workers.dev ligado e Version URLs (prévia de cada PR) explícitos.
+  // [fonte: developers.cloudflare.com/workers/configuration/previews]
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

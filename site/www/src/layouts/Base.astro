@@ -1,0 +1,67 @@
+---
+// Layout de toda página do markdownscribe.com. A marca entra por três
+// portas, nenhuma com valor digitado: tokens e fontes (base.css), tags de
+// favicon/manifesto/theme-color (lidas de brand/favicon/head.html) e o
+// lockup (arquivo da marca, versão clara e escura).
+import "@markdownscribe/site-shared/base.css";
+import { parseHeadTags } from "@markdownscribe/site-shared/head-tags";
+import brandHeadHtml from "@markdownscribe/site-shared/brand/favicon/head.html?raw";
+import lockupLight from "@markdownscribe/site-shared/brand/logo/lockup-light.svg?url";
+import lockupDark from "@markdownscribe/site-shared/brand/logo/lockup-dark.svg?url";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og-default.png", Astro.site);
+const brandTags = parseHeadTags(brandHeadHtml);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {brandTags.map(({ tag, attrs }) => (tag === "link" ? <link {...attrs} /> : <meta {...attrs} />))}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="brand" aria-label="MarkdownScribe home">
+        <picture>
+          <source srcset={lockupDark} media="(prefers-color-scheme: dark)" />
+          <img src={lockupLight} alt="MarkdownScribe" width="316" height="32" />
+        </picture>
+      </a>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  .site-header,
+  main {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: var(--ms-space-5) var(--ms-space-4);
+  }
+
+  .brand img {
+    display: block;
+    height: 2rem;
+    width: auto;
+  }
+</style>

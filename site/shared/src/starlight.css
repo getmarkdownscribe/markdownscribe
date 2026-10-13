@@ -1,0 +1,36 @@
+/* Starlight com os tokens da marca (SPEC-015, regra 5 do recado da marca).
+   Em vez de escolher cores no editor de tema, cada variável do Starlight
+   aponta para um --ms-*. Os --ms-* já trocam sozinhos entre claro e escuro
+   pelo data-theme, que é o mesmo atributo que o Starlight usa.
+
+   O seletor repete os três casos porque o Starlight define o tema claro em
+   :root[data-theme="light"], de especificidade maior que :root. */
+@import "../brand/tokens.css";
+@import "./fonts.css";
+
+:root,
+:root[data-theme="light"],
+:root[data-theme="dark"] {
+  --sl-font: var(--ms-font-sans);
+  --sl-font-mono: var(--ms-font-mono);
+
+  /* Escala de cinza do Starlight: white = texto de maior contraste,
+     black = fundo da página. A ordem vale nos dois modos porque os --ms-*
+     já invertem sozinhos. */
+  --sl-color-white: var(--ms-text);
+  --sl-color-gray-1: var(--ms-text);
+  --sl-color-gray-2: var(--ms-text-2);
+  --sl-color-gray-3: var(--ms-text-muted);
+  --sl-color-gray-4: var(--ms-text-muted);
+  --sl-color-gray-5: var(--ms-border);
+  --sl-color-gray-6: var(--ms-surface);
+  --sl-color-gray-7: var(--ms-surface);
+  --sl-color-black: var(--ms-bg);
+
+  /* Nas docs, o "acento" do Starlight pinta links e o item ativo do menu.
+     Pela marca, link é --ms-link; o laranja (--ms-accent) fica reservado ao
+     único botão principal da tela. */
+  --sl-color-accent-low: var(--ms-surface);
+  --sl-color-accent: var(--ms-link);
+  --sl-color-accent-high: var(--ms-link-hover);
+}

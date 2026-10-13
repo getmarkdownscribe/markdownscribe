@@ -1,0 +1,15 @@
+---
+// Servida pelo Worker em qualquer caminho inexistente
+// (`not_found_handling: "404-page"`, wrangler.jsonc), com status 404 de
+// verdade. É o oposto do domínio estacionado, que respondia 200 a tudo.
+import Base from "../layouts/Base.astro";
+import { HOSTS } from "@markdownscribe/site-shared/links";
+---
+
+<Base title="Page not found · MarkdownScribe" description="This page does not exist on markdownscribe.com.">
+  <h1>Page not found</h1>
+  <p>
+    There is nothing at this address. The <a href="/">home page</a> lists what MarkdownScribe does, and the
+    <a href={HOSTS.docs}>documentation</a> has every operation and error code.
+  </p>
+</Base>

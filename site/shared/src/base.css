@@ -1,0 +1,64 @@
+/* Base do site www: tokens e fontes da marca. Só var(--ms-*), nunca valor
+   (check-brand-hex no CI). O Starlight usa starlight.css no lugar deste. */
+@import "../brand/tokens.css";
+@import "./fonts.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ms-bg);
+  color: var(--ms-text);
+  font-family: var(--ms-font-sans);
+  font-weight: var(--ms-weight-text);
+  font-size: 100%;
+  line-height: var(--ms-leading-body);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: var(--ms-weight-heading);
+  line-height: var(--ms-leading-heading);
+  letter-spacing: var(--ms-tracking-heading);
+}
+
+h1 {
+  font-size: var(--ms-text-h1);
+}
+
+h2 {
+  font-size: var(--ms-text-h2);
+}
+
+h3 {
+  font-size: var(--ms-text-h3);
+}
+
+a {
+  color: var(--ms-link);
+}
+
+a:hover {
+  color: var(--ms-link-hover);
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: var(--ms-font-mono);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ms-link);
+  outline-offset: 2px;
+}

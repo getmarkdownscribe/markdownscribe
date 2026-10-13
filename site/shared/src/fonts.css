@@ -1,0 +1,31 @@
+/* Fontes da marca, auto-hospedadas (SPEC-015: nunca do Google Fonts).
+   Os caminhos apontam para a cópia gerada em ../brand/fonts; o Vite resolve,
+   copia com hash para o build e reescreve a URL. */
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../brand/fonts/AtkinsonHyperlegibleNext-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../brand/fonts/AtkinsonHyperlegibleNext-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../brand/fonts/AtkinsonHyperlegibleNext-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../brand/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
