@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72" role="img" aria-label="MarkdownScribe">
+  <title>MarkdownScribe</title>
+  <desc>A # whose last stroke ends in a pen nib. MarkdownScribe brand mark; see brand/MANUAL.md.</desc>
+  <rect width="72" height="72" rx="14.4" fill="#B84A22"/>
+<g transform="translate(7.96 7.72) scale(0.78)"><g transform="translate(0 -2)">
+    <g fill="none" stroke="#EFEDE8" stroke-width="9" stroke-linecap="round">
+      <path d="M12 28 H62"/>
+      <path d="M10 46 H56"/>
+      <path d="M26 14 L18 58"/>
+      <path d="M54 14 L48.99 41.55"/>
+    </g>
+    <path fill="#EFEDE8" d="M53.42 42.36 L54.36 56.75 L44.34 67.13 L38.62 53.89 L44.56 40.74 Z"/>
+    <path class="slit" fill="none" stroke="#B84A22" stroke-width="2.6" stroke-linecap="round" d="M46.84 53.36 L44.7 65.16"/>
+  </g>
+</g></svg>

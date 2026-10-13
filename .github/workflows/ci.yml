@@ -35,3 +35,5 @@ jobs:
         run: pnpm openapi:check
       - name: Context cost within budget
         run: pnpm context:cost
+      - name: No brand colour typed outside site/shared/brand (SPEC-015)
+        run: node scripts/check-brand-hex.mjs

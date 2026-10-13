@@ -1,0 +1,100 @@
+/* MarkdownScribe — tokens da marca. GERADO por `pnpm brand:build` a partir de brand/tokens.json (SPEC-015). Não editar à mão. */
+:root {
+  --ms-bg: #EFEDE8;
+  --ms-surface: #F7F5F1;
+  --ms-surface-inverse: #2A2724;
+  --ms-text: #2A2724;
+  --ms-text-2: #5C5750;
+  --ms-text-muted: #6B655C;
+  --ms-border: #CFC9BE;
+  --ms-link: #1F6F7A;
+  --ms-link-hover: #185A63;
+  --ms-accent: #B84A22;
+  --ms-accent-hover: #A3401C;
+  --ms-on-accent: #FFFFFF;
+  --ms-code-text: #D6E1C7;
+  --ms-code-key: #F0997B;
+  --ms-success-bg: #D6E1C7;
+  --ms-success-text: #2F5A2A;
+  --ms-warning-bg: #F3E4C0;
+  --ms-warning-text: #7A4E07;
+  --ms-danger-bg: #F6D8D4;
+  --ms-danger-text: #9E2A1F;
+  --ms-danger-fill: #C8281B;
+  --ms-on-danger: #FFFFFF;
+  --ms-font-sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --ms-font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --ms-weight-text: 400;
+  --ms-weight-heading: 500;
+  --ms-text-caption: 0.875rem;
+  --ms-text-body: 1rem;
+  --ms-text-lead: 1.125rem;
+  --ms-text-h3: 1.375rem;
+  --ms-text-h2: 1.75rem;
+  --ms-text-h1: 2.25rem;
+  --ms-text-display: 3rem;
+  --ms-leading-body: 1.55;
+  --ms-leading-heading: 1.25;
+  --ms-tracking-heading: -0.01em;
+  --ms-space-1: 0.25rem;
+  --ms-space-2: 0.5rem;
+  --ms-space-3: 0.75rem;
+  --ms-space-4: 1rem;
+  --ms-space-5: 1.5rem;
+  --ms-space-6: 2rem;
+  --ms-space-7: 3rem;
+  --ms-space-8: 4rem;
+  --ms-radius-control: 6px;
+  --ms-radius-card: 10px;
+  color-scheme: light dark;
+}
+:root[data-theme="dark"] {
+  --ms-bg: #1E1C19;
+  --ms-surface: #2A2724;
+  --ms-surface-inverse: #2A2724;
+  --ms-text: #EFEDE8;
+  --ms-text-2: #B9B3A8;
+  --ms-text-muted: #9A9287;
+  --ms-border: #3D3934;
+  --ms-link: #7DBEB8;
+  --ms-link-hover: #9ACFCA;
+  --ms-accent: #E8743F;
+  --ms-accent-hover: #F08A5B;
+  --ms-on-accent: #1E1C19;
+  --ms-code-text: #D6E1C7;
+  --ms-code-key: #F0997B;
+  --ms-success-bg: #2F3A2A;
+  --ms-success-text: #B7D5A4;
+  --ms-warning-bg: #3E3214;
+  --ms-warning-text: #E6C77A;
+  --ms-danger-bg: #3E1F1B;
+  --ms-danger-text: #F0A69C;
+  --ms-danger-fill: #C8281B;
+  --ms-on-danger: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ms-bg: #1E1C19;
+    --ms-surface: #2A2724;
+    --ms-surface-inverse: #2A2724;
+    --ms-text: #EFEDE8;
+    --ms-text-2: #B9B3A8;
+    --ms-text-muted: #9A9287;
+    --ms-border: #3D3934;
+    --ms-link: #7DBEB8;
+    --ms-link-hover: #9ACFCA;
+    --ms-accent: #E8743F;
+    --ms-accent-hover: #F08A5B;
+    --ms-on-accent: #1E1C19;
+    --ms-code-text: #D6E1C7;
+    --ms-code-key: #F0997B;
+    --ms-success-bg: #2F3A2A;
+    --ms-success-text: #B7D5A4;
+    --ms-warning-bg: #3E3214;
+    --ms-warning-text: #E6C77A;
+    --ms-danger-bg: #3E1F1B;
+    --ms-danger-text: #F0A69C;
+    --ms-danger-fill: #C8281B;
+    --ms-on-danger: #FFFFFF;
+  }
+}
