@@ -27,6 +27,12 @@ export default defineConfig({
       favicon: "/favicon.svg",
       head: headTags,
       customCss: ["@markdownscribe/site-shared/starlight.css"],
+      // Rótulos em sentence case (SPEC-015). Cada grupo novo entra aqui na
+      // história que cria as páginas dele.
+      sidebar: [
+        { label: "Overview", link: "/" },
+        { label: "Errors", items: [{ autogenerate: { directory: "errors" } }] },
+      ],
       social: [
         { icon: "github", label: "GitHub", href: "https://github.com/getmarkdownscribe/markdownscribe" },
       ],
