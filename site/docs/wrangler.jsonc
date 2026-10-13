@@ -1,6 +1,6 @@
 // docs.markdownscribe.com — Worker só com static assets (D-047 §1).
-// O domínio próprio entra na história C (MKD-170); até lá o Worker responde
-// só em *.workers.dev.
+// Domínio próprio desde a MKD-170: a Cloudflare cria o registro DNS e o
+// certificado; o *.workers.dev continua respondendo (prévias e diagnóstico).
 // [fonte: developers.cloudflare.com/workers/framework-guides/web-apps/astro]
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
@@ -10,6 +10,10 @@
   // [fonte: developers.cloudflare.com/workers/configuration/previews]
   "workers_dev": true,
   "preview_urls": true,
+  // Custom Domain: toda resposta de erro da API aponta para
+  // https://docs.markdownscribe.com/errors/<código>.
+  // [fonte: developers.cloudflare.com/workers/configuration/routing/custom-domains]
+  "routes": [{ "pattern": "docs.markdownscribe.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page"
