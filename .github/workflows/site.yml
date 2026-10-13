@@ -43,6 +43,8 @@ jobs:
         run: pnpm --filter "./site/**" typecheck
       - name: Build site and docs
         run: pnpm --filter "./site/**" build
+      - name: One docs page per API error code (reads the build)
+        run: pnpm --filter @markdownscribe/site-docs test
       - name: No brand colour typed outside site/shared/brand (SPEC-015)
         run: node scripts/check-brand-hex.mjs
       - uses: actions/upload-artifact@v7
