@@ -29,6 +29,13 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # The examples on the operation pages are executed against
+      # api.markdownscribe.com with the docs CI key (about 14
+      # credits per run when all six exist). Same rule as ci.yml: on pushes and
+      # on PRs from this repository the key must be there; forks skip.
+      MDSCRIBE_DOCS_API_KEY: ${{ secrets.MDSCRIBE_DOCS_API_KEY }}
+      MDSCRIBE_REQUIRE_LIVE: ${{ (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && '1' || '' }}
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -43,7 +50,7 @@ jobs:
         run: pnpm --filter "./site/**" typecheck
       - name: Build site and docs
         run: pnpm --filter "./site/**" build
-      - name: One docs page per API error code (reads the build)
+      - name: Docs tests (error pages, operation pages, authority terms, live examples)
         run: pnpm --filter @markdownscribe/site-docs test
       - name: No brand colour typed outside site/shared/brand (SPEC-015)
         run: node scripts/check-brand-hex.mjs

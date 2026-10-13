@@ -1135,9 +1135,9 @@
           }
         },
         "x-credits": {
-          "min": 2,
+          "min": 3,
           "max": 8,
-          "note": "2 for `raw` and 3 for `clean` when a static fetch is enough; 8 when the page needed the headless browser. Check `metadata.used_playwright` and the X-Credits-Charged header."
+          "note": "3 for `clean` when an official .md file or a static fetch is enough; 8 when the page needed the headless browser. `raw` always uses the browser, so it always costs 8. Check `metadata.used_playwright` and the X-Credits-Charged header."
         },
         "requestBody": {
           "required": true,

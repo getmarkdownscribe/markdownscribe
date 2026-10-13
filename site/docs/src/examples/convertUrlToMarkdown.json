@@ -1,0 +1,33 @@
+{
+  "$comment": "Exemplo da página operations/url-to-md. tests/examples.live.test.ts executa este request contra a API e confere expect; scripts/operation-blocks.mjs gera o bloco da página a partir daqui. commonmark.org/help: estável, sem anúncio, sai pelo fetch estático (3 créditos). example.com não serve: o clean devolve 422 (texto curto demais) e a página pede para não ser usada em testes.",
+  "request": {
+    "method": "POST",
+    "path": "/v1/url-to-md",
+    "body": { "url": "https://commonmark.org/help/" }
+  },
+  "sdk": { "method": "urlToMd" },
+  "cli": { "command": "mdscribe url https://commonmark.org/help/" },
+  "expect": {
+    "status": 200,
+    "creditsCharged": 3,
+    "bodyContains": ["**Markdown** is a simple way to format text", "\"used_playwright\":false"]
+  },
+  "capturedOn": "2026-10-13",
+  "responseNote": "`markdown` is cut after the first lines here; the full value is about 1,800 characters.",
+  "response": {
+    "markdown": "**Markdown** is a simple way to format text that looks great on any device. It doesn’t do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know.\n[Try Our 10 Minute Markdown Tutorial](https://commonmark.org/help/tutorial/)  \n| Type  | Or  | … to Get  |  \n| --- | --- | --- |  \n| *Italic*  | _Italic_  | _Italic_  |  \n…",
+    "mode": "clean",
+    "metadata": {
+      "title": "Markdown Reference",
+      "author": null,
+      "published_date": null,
+      "used_playwright": false,
+      "extraction_quality": "raw_fallback"
+    },
+    "meta": {
+      "request_id": "01M4TVNEKMY7Y4EQ0E4K2F4FN6",
+      "duration_ms": 692,
+      "credits": 3
+    }
+  }
+}

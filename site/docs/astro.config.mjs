@@ -31,6 +31,7 @@ export default defineConfig({
       // história que cria as páginas dele.
       sidebar: [
         { label: "Overview", link: "/" },
+        { label: "Operations", items: ["operations/url-to-md"] },
         { label: "Errors", items: [{ autogenerate: { directory: "errors" } }] },
       ],
       social: [
